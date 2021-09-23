@@ -54,7 +54,7 @@ class Command(BaseCommand):
         # create category and add the key in data store to be added later
         for category in data.get("product_categories"):
             if self.product_categories.get(category) is None:
-                pc, created = ProductCategory.objects.get_or_create(name=category)
+                pc, created = ProductCategory.objects.get_or_create(name=category, display_name=category.replace("-", " "))
                 self.product_categories[category] = pc.id
             self.product_related_data[product_id]["categories"].append(self.product_categories[category])
 
