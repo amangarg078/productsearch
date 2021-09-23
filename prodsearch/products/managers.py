@@ -9,14 +9,14 @@ from django.conf import settings
 class ProductQuerySet(models.QuerySet):
     def search(self, query):
         if settings.IS_DB_POSTGRES:
-            search_q = [SearchQuery(i) for i in query.split(" ")]
+            search_q = [SearchQuery(i) for i in query.split()]
             search_q = functools.reduce(operator.or_, search_q)
             return self.annotate(
                 search=SearchVector('title', 'description', 'source', 'colour'),
             ).filter(search=search_q)
 
         #### for sqlite
-        regex = r"\b({})\b".format("|".join(query.split(" ")))
+        regex = r"\b({})\b".format("|".join(query.split()))
         return self.filter(
             Q(title__iregex=regex)|\
             Q(description__iregex=regex)|\
