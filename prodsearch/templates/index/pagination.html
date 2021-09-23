@@ -1,0 +1,43 @@
+{% load utils %}
+{% request_parameters request as parameters %}
+
+<div class="text-center">
+    <nav aria-label="pagination">
+        <ul class="pagination">
+            {% if page_obj.has_previous %}
+                <li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}{{ parameters }}" aria-label="Previous">&laquo;</a></li>
+            {% else %}
+                <li class="disabled page-item" aria-hidden="true"><span class="page-link">&laquo;</span></li>
+            {% endif %}
+
+            {% if page_obj.number|add:'-2' > 1 %}
+                <li class="page-item"><a class="page-link" href="?page=1{{ parameters }}">1</a></li>
+                    {% if not page_obj.number|add:'-2' == 2 %}
+                <li class="page-item"><a class="page-link" href="?page={{ page_obj.number|add:'-3' }}{{ parameters }}">&hellip;</a></li>
+                {% endif %}
+            {% endif %}
+
+            {% for i in paginator.page_range %}
+                {% if page_obj.number == i %}
+                    <li class="active page-item"><span class="page-link">{{ i }} <span class="sr-only">(current)</span></span></li>
+                {% elif i > page_obj.number|add:'-3' and i < page_obj.number|add:'3' %}
+                    <li class="page-item"><a class="page-link" href="?page={{ i }}{{ parameters }}">{{ i }}</a></li>
+                {% endif %}
+            {% endfor %}
+
+            {% if page_obj.paginator.num_pages > page_obj.number|add:'2' %}
+                {% if not page_obj.number|add:'1' == page_obj.paginator.num_pages|add:'-2' %}
+                    <li class="page-item"><a class="page-link" href="?page={{ page_obj.number|add:'3' }}{{ parameters }}">&hellip;</a></li>
+                {% endif %}
+                <li class="page-item"><a class="page-link" href="?page={{ paginator.num_pages }}{{ parameters }}">{{ paginator.num_pages }}</a></li>
+            {% endif %}
+
+            {% if page_obj.has_next %}
+                <li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}{{ parameters }}" aria-label="Next">&raquo;</a></li>
+            {% else %}
+                <li class="disabled page-item" aria-hidden="true"><span class="page-link">&raquo;</span></li>
+            {% endif %}
+
+        </ul>
+    </nav>
+</div>

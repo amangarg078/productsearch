@@ -1,0 +1,79 @@
+{% extends "index/base.html" %}
+{% load utils %}
+{% block title %}Products{% endblock title %}
+
+{% block body %}
+<header>
+    <div class="navbar navbar-dark bg-dark shadow-sm">
+        <div class="container">
+            <a href="#" class="navbar-brand d-flex align-items-center">
+                <strong>Products</strong>
+            </a>
+        </div>
+    </div>
+</header>
+
+<main>
+
+
+    <section class="py-5 text-center container">
+        <div class="row py-lg-5">
+            <div class="col-lg-6 col-md-8 mx-auto">
+                <form class="form full-width-form" method="GET" action="">
+                    <div class="form-row d-flex align-items-center">
+                        <input type="text" name="q" id="id_q" class="form-control" placeholder="Search for products..." {% if request.GET.q %}value="{{request.GET.q}}"{% endif %}>
+
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-search"></i>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <div class="py-5 bg-light">
+        <div class="container">
+            <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3" >
+                {% for product in object_list %}
+                    <div class="col">
+                        <div class="card shadow-sm h-100">
+                            <img src="{{ product.imgs_src }}" class="card-img-top">
+
+                            <div class="card-body">
+                                <h3 class="card-title">{{ product.title }}</h3>
+                                <p class="card-text">{{ product.description }}</p>
+                                <p class="card-text">
+                                    <strong>{{ product.currency_code }}&nbsp;
+                                    {% if product.discount %}
+                                        <del>{{ product.price }}</del>
+                                        {{ product.price|discount_price:product.discount }}
+                                    {% else %}
+                                        {{ product.price }}
+                                    {% endif %}
+                                    </strong>
+                                </p>
+                                <p class="card-text">
+                                    {% for category in product.categories.all %}
+                                        <span class="badge bg-success">{{ category.display_name }}</span>
+                                    {% endfor %}
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    <section class="py-5 d-flex justify-content-center container">
+        <div class="row py-lg-5">
+            <div class="col-lg-6 col-md-8 ">
+                {% include "index/pagination.html" %}
+            </div>
+        </div>
+    </section>
+
+
+
+</main>
+{% endblock body %}
