@@ -24,6 +24,9 @@ class Command(BaseCommand):
         )
 
     def populate_data(self, data):
+        # create instances for bulk insert query
+        # create a data store to save data for related tables
+        # since we will not have primary key values in case of sqlite
         product_id = data.get("product_id")
         try:
             description, colour = data.get("product_description").split("colour:  ")
